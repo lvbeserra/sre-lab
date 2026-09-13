@@ -1,0 +1,16 @@
+replicaCount: 2
+
+image:
+  repository: platform-api
+  tag: "1.0.0"
+  pullPolicy: Never
+
+appReady: "true"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 500m
+    memory: 128Mi
