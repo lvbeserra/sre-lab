@@ -8,7 +8,7 @@ variable "sccm_admin_password" {
 resource "azurerm_windows_virtual_machine" "sccm" {
   name                = "SCCM01"
   computer_name       = "SCCM01"
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
   location            = "eastus"
   size                = "Standard_D2as_v7"
   admin_username      = "luizadmin"

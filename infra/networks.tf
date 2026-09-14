@@ -1,6 +1,6 @@
 resource "azurerm_virtual_network" "sre" {
   name                = "vnet-northcentralus-2"
-  resource_group_name = "RG-LAB-SRE"
+  resource_group_name = azurerm_resource_group.sre.name
   location            = "northcentralus"
   address_space       = ["10.20.0.0/16"]
 
@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "sre" {
 
 resource "azurerm_subnet" "sre_ad" {
   name                            = "snet-sre-ad"
-  resource_group_name             = "RG-LAB-SRE"
+  resource_group_name             = azurerm_resource_group.sre.name
   virtual_network_name            = azurerm_virtual_network.sre.name
   address_prefixes                = ["10.20.0.0/24"]
   default_outbound_access_enabled = false

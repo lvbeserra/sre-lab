@@ -8,7 +8,7 @@ variable "ad_admin_password" {
 resource "azurerm_windows_virtual_machine" "ad" {
   name                = "DC01"
   computer_name       = "DC01"
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
   location            = "northcentralus"
   size                = "Standard_B2as_v2"
   admin_username      = "luiz.adm"

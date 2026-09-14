@@ -1,6 +1,6 @@
 resource "azurerm_network_interface" "sre" {
   name                = "srelab01314"
-  resource_group_name = "RG-LAB-SRE"
+  resource_group_name = azurerm_resource_group.sre.name
   location            = "northcentralus"
 
   ip_configuration {

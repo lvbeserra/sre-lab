@@ -1,6 +1,6 @@
 resource "azurerm_network_interface" "client" {
   name                           = "client0114"
-  resource_group_name            = "RG-LAB-WIN2025"
+  resource_group_name            = azurerm_resource_group.windows.name
   location                       = "eastus"
   accelerated_networking_enabled = true
 

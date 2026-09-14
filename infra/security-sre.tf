@@ -1,6 +1,6 @@
 resource "azurerm_network_security_group" "sre" {
   name                = "SRELAB01-nsg"
-  resource_group_name = "RG-LAB-SRE"
+  resource_group_name = azurerm_resource_group.sre.name
   location            = "northcentralus"
 
   security_rule {

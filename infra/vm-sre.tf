@@ -1,7 +1,7 @@
 resource "azurerm_linux_virtual_machine" "sre" {
   name                = "SRELAB01"
   computer_name       = "SRELAB01"
-  resource_group_name = "RG-LAB-SRE"
+  resource_group_name = azurerm_resource_group.sre.name
   location            = "northcentralus"
   size                = "Standard_B2as_v2"
   admin_username      = "azureuser"

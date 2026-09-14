@@ -2,25 +2,25 @@ locals {
   peerings = {
     sre_to_ad = {
       name   = "sre-para-ad"
-      group  = "RG-LAB-SRE"
+      group  = azurerm_resource_group.sre.name
       source = azurerm_virtual_network.sre.name
       target = azurerm_virtual_network.ad.id
     }
     ad_to_sre = {
       name   = "ad-para-sre"
-      group  = "RG-LAB-WIN2025"
+      group  = azurerm_resource_group.windows.name
       source = azurerm_virtual_network.ad.name
       target = azurerm_virtual_network.sre.id
     }
     sccm_to_ad = {
       name   = "northcentralus-to-eastus"
-      group  = "RG-LAB-WIN2025"
+      group  = azurerm_resource_group.windows.name
       source = azurerm_virtual_network.sccm.name
       target = azurerm_virtual_network.ad.id
     }
     ad_to_sccm = {
       name   = "eastus-to-northcentralus"
-      group  = "RG-LAB-WIN2025"
+      group  = azurerm_resource_group.windows.name
       source = azurerm_virtual_network.ad.name
       target = azurerm_virtual_network.sccm.id
     }

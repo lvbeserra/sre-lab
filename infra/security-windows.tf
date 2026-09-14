@@ -12,7 +12,7 @@ resource "azurerm_network_security_group" "windows" {
 
   name                = each.value.name
   location            = each.value.location
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
 
   security_rule {
     name                       = "RDP"

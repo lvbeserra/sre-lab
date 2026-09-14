@@ -1,6 +1,6 @@
 resource "azurerm_network_interface" "ad" {
   name                = "dc01573"
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
   location            = "northcentralus"
 
   ip_configuration {

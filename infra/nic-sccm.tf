@@ -1,6 +1,6 @@
 resource "azurerm_network_interface" "sccm" {
   name                = "sccm01646"
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
   location            = "eastus"
 
   ip_configuration {

@@ -1,6 +1,6 @@
 resource "azurerm_public_ip" "sre" {
   name                    = "SRELAB01-ip"
-  resource_group_name     = "RG-LAB-SRE"
+  resource_group_name     = azurerm_resource_group.sre.name
   location                = "northcentralus"
   allocation_method       = "Static"
   sku                     = "Standard"

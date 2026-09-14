@@ -8,7 +8,7 @@ variable "client_admin_password" {
 resource "azurerm_windows_virtual_machine" "client" {
   name                = "CLIENT01"
   computer_name       = "CLIENT01"
-  resource_group_name = "RG-LAB-WIN2025"
+  resource_group_name = azurerm_resource_group.windows.name
   location            = "eastus"
   size                = "Standard_D2as_v7"
   zone                = "1"
