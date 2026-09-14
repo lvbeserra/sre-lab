@@ -1,32 +1,31 @@
-variable "client_admin_password" {
-  description = "Senha necessária apenas para criar ou reconstruir CLIENT01."
+variable "sccm_admin_password" {
+  description = "Senha administrativa local para reconstruir SCCM01."
   type        = string
   sensitive   = true
   default     = null
 }
 
-resource "azurerm_windows_virtual_machine" "client" {
-  name                = "CLIENT01"
-  computer_name       = "CLIENT01"
+resource "azurerm_windows_virtual_machine" "sccm" {
+  name                = "SCCM01"
+  computer_name       = "SCCM01"
   resource_group_name = "RG-LAB-WIN2025"
   location            = "eastus"
   size                = "Standard_D2as_v7"
-  zone                = "1"
-  admin_username      = "azureuser"
-  admin_password      = var.client_admin_password
+  admin_username      = "luizadmin"
+  admin_password      = var.sccm_admin_password
 
-  network_interface_ids = [azurerm_network_interface.client.id]
+  network_interface_ids = [azurerm_network_interface.sccm.id]
 
   provision_vm_agent        = true
-  automatic_updates_enabled = false
-  patch_mode                = "Manual"
+  automatic_updates_enabled = true
+  patch_mode                = "AutomaticByOS"
   patch_assessment_mode     = "ImageDefault"
   hotpatching_enabled       = false
   secure_boot_enabled       = true
   vtpm_enabled              = true
 
   os_disk {
-    name                 = "CLIENT01_OsDisk_1_838f17a7bb2b44139489b251858fd53c"
+    name                 = "SCCM01_OsDisk_1_e540d8a7eb574ac5b513e3ee97420fe1"
     caching              = "ReadWrite"
     storage_account_type = "StandardSSD_LRS"
     disk_size_gb         = 127
