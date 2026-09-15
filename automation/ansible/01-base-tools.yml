@@ -16,6 +16,7 @@
           - curl
           - git
           - gnupg
+          - python3-debian
           - unzip
         state: present
 
@@ -32,12 +33,19 @@
         mode: "0644"
 
     - name: Configurar repositório oficial do Docker
-      ansible.builtin.apt_repository:
-        repo: >-
-          deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc]
-          https://download.docker.com/linux/ubuntu
-          {{ ansible_distribution_release }} stable
-        filename: docker
+      ansible.builtin.deb822_repository:
+        name: docker
+        types:
+          - deb
+        uris:
+          - https://download.docker.com/linux/ubuntu
+        suites:
+          - "{{ ansible_distribution_release }}"
+        components:
+          - stable
+        architectures:
+          - amd64
+        signed_by: /etc/apt/keyrings/docker.asc
         state: present
 
     - name: Instalar Docker
