@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: platform-api
+  namespace: observability
+  labels:
+    release: monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - lab
+  selector:
+    matchLabels:
+      app: platform-api-gitops
+  podMetricsEndpoints:
+    - targetPort: 8000
+      path: /metrics
+      interval: 30s
