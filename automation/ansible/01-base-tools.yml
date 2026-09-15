@@ -89,6 +89,7 @@
         src: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
         dest: /tmp
         remote_src: true
+      when: not ansible_check_mode
 
     - name: Instalar binário do Helm
       ansible.builtin.copy:
@@ -96,6 +97,7 @@
         dest: /usr/local/bin/helm
         mode: "0755"
         remote_src: true
+      when: not ansible_check_mode
 
     - name: Verificar Docker
       ansible.builtin.command: docker --version
