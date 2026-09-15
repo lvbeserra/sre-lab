@@ -1,0 +1,112 @@
+Evidências Azure e Terraform
+Data UTC: 2026-09-15T01:38:43+00:00
+
+=== Conta Azure ===
+Assinatura            ID                                    Usuario
+--------------------  ------------------------------------  -----------------------------
+Azure subscription 1  2237e4b1-cccb-4531-a1ed-acec25f43639  live.com#lvbeserra0@gmail.com
+
+=== Versões ===
+Terraform v1.16.0
+on linux_amd64
++ provider registry.terraform.io/hashicorp/azurerm v4.81.0
+
+Your version of Terraform is out of date! The latest version
+is 1.16.2. You can update by downloading from https://developer.hashicorp.com/terraform/install
+2.90.0
+
+=== Terraform init ===
+Initializing the backend...
+
+Successfully configured the backend "azurerm"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/azurerm from the dependency lock file
+- Installing hashicorp/azurerm v4.81.0...
+- Installed hashicorp/azurerm v4.81.0 (signed by HashiCorp)
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+
+=== Terraform validate ===
+Success! The configuration is valid.
+
+
+=== Recursos no state ===
+azurerm_dev_test_global_vm_shutdown_schedule.lab["ad"]
+azurerm_dev_test_global_vm_shutdown_schedule.lab["client"]
+azurerm_dev_test_global_vm_shutdown_schedule.lab["sccm"]
+azurerm_linux_virtual_machine.sre
+azurerm_network_interface.ad
+azurerm_network_interface.client
+azurerm_network_interface.sccm
+azurerm_network_interface.sre
+azurerm_network_interface_security_group_association.ad
+azurerm_network_interface_security_group_association.client
+azurerm_network_interface_security_group_association.sccm
+azurerm_network_interface_security_group_association.sre
+azurerm_network_security_group.sre
+azurerm_network_security_group.windows["ad"]
+azurerm_network_security_group.windows["client"]
+azurerm_network_security_group.windows["legacy"]
+azurerm_network_security_group.windows["sccm"]
+azurerm_public_ip.sre
+azurerm_public_ip.windows["ad"]
+azurerm_public_ip.windows["client"]
+azurerm_public_ip.windows["sccm"]
+azurerm_resource_group.sre
+azurerm_resource_group.windows
+azurerm_subnet.ad
+azurerm_subnet.client
+azurerm_subnet.sccm
+azurerm_subnet.sre_ad
+azurerm_virtual_network.ad
+azurerm_virtual_network.sccm
+azurerm_virtual_network.sre
+azurerm_virtual_network_peering.lab["ad_to_sccm"]
+azurerm_virtual_network_peering.lab["ad_to_sre"]
+azurerm_virtual_network_peering.lab["sccm_to_ad"]
+azurerm_virtual_network_peering.lab["sre_to_ad"]
+azurerm_windows_virtual_machine.ad
+azurerm_windows_virtual_machine.client
+azurerm_windows_virtual_machine.sccm
+
+=== Recursos dos laboratórios ===
+Grupo           Nome                                                Tipo                                     Regiao
+--------------  --------------------------------------------------  ---------------------------------------  --------------
+RG-LAB-WIN2025  WIN2025LAB-nsg                                      Microsoft.Network/networkSecurityGroups  northcentralus
+RG-LAB-WIN2025  vnet-northcentralus-1                               Microsoft.Network/virtualNetworks        northcentralus
+RG-LAB-WIN2025  DC01-nsg                                            Microsoft.Network/networkSecurityGroups  northcentralus
+RG-LAB-WIN2025  DC01-ip                                             Microsoft.Network/publicIPAddresses      northcentralus
+RG-LAB-WIN2025  dc01573                                             Microsoft.Network/networkInterfaces      northcentralus
+RG-LAB-WIN2025  DC01                                                Microsoft.Compute/virtualMachines        northcentralus
+RG-LAB-WIN2025  DC01_OsDisk_1_110c050a14454a9da6a07159743f59d7      Microsoft.Compute/disks                  northcentralus
+RG-LAB-WIN2025  shutdown-computevm-DC01                             Microsoft.DevTestLab/schedules           northcentralus
+RG-LAB-WIN2025  SCCM01-nsg                                          Microsoft.Network/networkSecurityGroups  eastus
+RG-LAB-WIN2025  SCCM01-ip                                           Microsoft.Network/publicIPAddresses      eastus
+RG-LAB-WIN2025  vnet-sccm-eastus                                    Microsoft.Network/virtualNetworks        eastus
+RG-LAB-WIN2025  sccm01646                                           Microsoft.Network/networkInterfaces      eastus
+RG-LAB-WIN2025  SCCM01                                              Microsoft.Compute/virtualMachines        eastus
+RG-LAB-WIN2025  SCCM01_OsDisk_1_e540d8a7eb574ac5b513e3ee97420fe1    Microsoft.Compute/disks                  eastus
+RG-LAB-WIN2025  shutdown-computevm-SCCM01                           Microsoft.DevTestLab/schedules           eastus
+RG-LAB-WIN2025  CLIENT01-nsg                                        Microsoft.Network/networkSecurityGroups  eastus
+RG-LAB-WIN2025  CLIENT01-ip                                         Microsoft.Network/publicIPAddresses      eastus
+RG-LAB-WIN2025  client0114                                          Microsoft.Network/networkInterfaces      eastus
+RG-LAB-WIN2025  CLIENT01                                            Microsoft.Compute/virtualMachines        eastus
+RG-LAB-WIN2025  CLIENT01_OsDisk_1_838f17a7bb2b44139489b251858fd53c  Microsoft.Compute/disks                  eastus
+RG-LAB-WIN2025  shutdown-computevm-CLIENT01                         Microsoft.DevTestLab/schedules           eastus
+RG-LAB-SRE      SRELAB01_key                                        Microsoft.Compute/sshPublicKeys          northcentralus
+RG-LAB-SRE      SRELAB01-nsg                                        Microsoft.Network/networkSecurityGroups  northcentralus
+RG-LAB-SRE      SRELAB01-ip                                         Microsoft.Network/publicIPAddresses      northcentralus
+RG-LAB-SRE      vnet-northcentralus-2                               Microsoft.Network/virtualNetworks        northcentralus
+RG-LAB-SRE      srelab01314                                         Microsoft.Network/networkInterfaces      northcentralus
+RG-LAB-SRE      SRELAB01                                            Microsoft.Compute/virtualMachines        northcentralus
+RG-LAB-SRE      SRELAB01_OsDisk_1_a92f548283e04fb5ae9e94d6b4a10cb1  Microsoft.Compute/disks                  northcentralus
