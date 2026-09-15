@@ -1,0 +1,22 @@
+---
+lab_user: azureuser
+lab_home: /home/azureuser
+
+docker_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+kubectl_version: v1.37.0
+kind_version: v0.33.0
+kind_node_image: kindest/node:v1.37.0
+helm_version: v3.22.0
+argocd_version: v3.5.2
+
+kind_cluster_name: sre-lab
+
+prometheus_chart_version: 91.1.0
+prometheus_release_name: monitoring
+prometheus_namespace: observability

@@ -1,0 +1,118 @@
+---
+- name: Configurar ferramentas base da SRELAB01
+  hosts: srelab
+  become: true
+
+  tasks:
+    - name: Atualizar cache do APT
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Instalar pacotes básicos
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - git
+          - gnupg
+          - unzip
+        state: present
+
+    - name: Criar diretório de chaves do APT
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Instalar chave do repositório Docker
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Configurar repositório oficial do Docker
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc]
+          https://download.docker.com/linux/ubuntu
+          {{ ansible_distribution_release }} stable
+        filename: docker
+        state: present
+
+    - name: Instalar Docker
+      ansible.builtin.apt:
+        name: "{{ docker_packages }}"
+        state: present
+        update_cache: true
+
+    - name: Iniciar e habilitar Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Adicionar usuário ao grupo docker
+      ansible.builtin.user:
+        name: "{{ lab_user }}"
+        groups: docker
+        append: true
+
+    - name: Instalar kubectl
+      ansible.builtin.get_url:
+        url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+        dest: /usr/local/bin/kubectl
+        mode: "0755"
+
+    - name: Instalar kind
+      ansible.builtin.get_url:
+        url: "https://kind.sigs.k8s.io/dl/{{ kind_version }}/kind-linux-amd64"
+        dest: /usr/local/bin/kind
+        mode: "0755"
+
+    - name: Baixar Helm
+      ansible.builtin.get_url:
+        url: "https://get.helm.sh/helm-{{ helm_version }}-linux-amd64.tar.gz"
+        dest: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
+        mode: "0644"
+
+    - name: Extrair Helm
+      ansible.builtin.unarchive:
+        src: "/tmp/helm-{{ helm_version }}-linux-amd64.tar.gz"
+        dest: /tmp
+        remote_src: true
+
+    - name: Instalar binário do Helm
+      ansible.builtin.copy:
+        src: /tmp/linux-amd64/helm
+        dest: /usr/local/bin/helm
+        mode: "0755"
+        remote_src: true
+
+    - name: Verificar Docker
+      ansible.builtin.command: docker --version
+      register: docker_result
+      changed_when: false
+
+    - name: Verificar kubectl
+      ansible.builtin.command: kubectl version --client
+      register: kubectl_result
+      changed_when: false
+
+    - name: Verificar kind
+      ansible.builtin.command: kind version
+      register: kind_result
+      changed_when: false
+
+    - name: Verificar Helm
+      ansible.builtin.command: helm version --short
+      register: helm_result
+      changed_when: false
+
+    - name: Exibir versões instaladas
+      ansible.builtin.debug:
+        msg:
+          - "{{ docker_result.stdout }}"
+          - "{{ kubectl_result.stdout }}"
+          - "{{ kind_result.stdout }}"
+          - "{{ helm_result.stdout }}"
