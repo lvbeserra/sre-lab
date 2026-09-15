@@ -1,0 +1,153 @@
+---
+- name: Construir plataforma Kubernetes da SRELAB01
+  hosts: srelab
+  become: false
+
+  environment:
+    HOME: "{{ lab_home }}"
+    KUBECONFIG: "{{ lab_home }}/.kube/config"
+
+  tasks:
+    - name: Verificar acesso ao Docker
+      ansible.builtin.command: docker info
+      changed_when: false
+
+    - name: Consultar clusters kind
+      ansible.builtin.command: kind get clusters
+      register: kind_clusters
+      changed_when: false
+
+    - name: Criar cluster kind
+      ansible.builtin.command:
+        argv:
+          - kind
+          - create
+          - cluster
+          - --name
+          - "{{ kind_cluster_name }}"
+          - --image
+          - "{{ kind_node_image }}"
+          - --config
+          - "{{ playbook_dir }}/files/kind-config.yaml"
+          - --wait
+          - 300s
+      when: kind_cluster_name not in kind_clusters.stdout_lines
+
+    - name: Criar namespace do Argo CD
+      ansible.builtin.command: kubectl create namespace argocd
+      register: argocd_namespace
+      failed_when:
+        - argocd_namespace.rc != 0
+        - "'AlreadyExists' not in argocd_namespace.stderr"
+      changed_when: argocd_namespace.rc == 0
+
+    - name: Instalar Argo CD
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - apply
+          - --namespace
+          - argocd
+          - --filename
+          - "https://raw.githubusercontent.com/argoproj/argo-cd/{{ argocd_version }}/manifests/install.yaml"
+      register: argocd_apply
+      changed_when: >-
+        ' created' in argocd_apply.stdout or
+        ' configured' in argocd_apply.stdout
+
+    - name: Aguardar o servidor do Argo CD
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - rollout
+          - status
+          - deployment/argocd-server
+          - --namespace
+          - argocd
+          - --timeout
+          - 300s
+      changed_when: false
+
+    - name: Adicionar repositório Helm do Prometheus
+      ansible.builtin.command:
+        argv:
+          - helm
+          - repo
+          - add
+          - prometheus-community
+          - https://prometheus-community.github.io/helm-charts
+          - --force-update
+      changed_when: false
+
+    - name: Atualizar repositórios Helm
+      ansible.builtin.command: helm repo update
+      changed_when: false
+
+    - name: Instalar Prometheus e Grafana
+      ansible.builtin.command:
+        argv:
+          - helm
+          - upgrade
+          - --install
+          - "{{ prometheus_release_name }}"
+          - prometheus-community/kube-prometheus-stack
+          - --namespace
+          - "{{ prometheus_namespace }}"
+          - --create-namespace
+          - --version
+          - "{{ prometheus_chart_version }}"
+          - --values
+          - "{{ playbook_dir }}/../../platform/monitoring/values.yaml"
+          - --wait
+          - --timeout
+          - 10m
+      register: monitoring_install
+      changed_when: "'has been upgraded' in monitoring_install.stdout or 'has been installed' in monitoring_install.stdout"
+
+    - name: Aplicar PodMonitor da API
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - apply
+          - --filename
+          - "{{ playbook_dir }}/../../platform/monitoring/api-podmonitor.yaml"
+      register: podmonitor_apply
+      changed_when: "'created' in podmonitor_apply.stdout or 'configured' in podmonitor_apply.stdout"
+
+    - name: Aplicar aplicação GitOps
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - apply
+          - --filename
+          - "{{ playbook_dir }}/../../platform/argocd/platform-api-application.yaml"
+      register: application_apply
+      changed_when: "'created' in application_apply.stdout or 'configured' in application_apply.stdout"
+
+    - name: Aguardar aplicação ficar saudável
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - wait
+          - application/platform-api-gitops
+          - --namespace
+          - argocd
+          - --for=jsonpath={.status.health.status}=Healthy
+          - --timeout=300s
+      changed_when: false
+
+    - name: Verificar nós
+      ansible.builtin.command: kubectl get nodes -o wide
+      register: nodes_result
+      changed_when: false
+
+    - name: Verificar pods
+      ansible.builtin.command: kubectl get pods -A
+      register: pods_result
+      changed_when: false
+
+    - name: Exibir resultado
+      ansible.builtin.debug:
+        msg:
+          - "{{ nodes_result.stdout_lines }}"
+          - "{{ pods_result.stdout_lines }}"
