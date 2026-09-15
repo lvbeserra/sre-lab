@@ -1,0 +1,29 @@
+6a6f03a (HEAD -> infra/terraform-lab, origin/infra/terraform-lab) Add Ansible automation for SRE base tools
+c17b241 Add Argo CD application definition
+3d9c7bd Add Kubernetes monitoring configuration
+7ef039e Manage existing VM shutdown schedules with Terraform
+084a7ec Define resource groups and infrastructure dependencies
+480257f Manage existing DC01 virtual machine with Terraform
+c2f2a2c Manage existing SCCM01 virtual machine with Terraform
+ca42ae0 Manage existing CLIENT01 virtual machine with Terraform
+00692b3 Manage existing SRELAB01 virtual machine with Terraform
+59bf106 Manage existing DC01 network interface with Terraform
+91fdf89 Manage existing SCCM01 network interface with Terraform
+c89e646 Manage existing CLIENT01 network interface with Terraform
+e28e633 Manage existing Windows public IPs with Terraform
+5f8e4c0 Manage SRE public IP and network interface with Terraform
+ef9def4 Manage existing Windows security groups with Terraform
+f1bffc2 Manage existing SRE security group with Terraform
+c5cce35 Manage existing lab network peerings with Terraform
+54b875d Manage existing SCCM network and subnets with Terraform
+fa848c4 Manage existing AD network and subnet with Terraform
+b2e74b0 Manage existing SRE network and subnet with Terraform
+68e754f Configure Terraform remote state in Azure Storage
+9e0a069 (origin/main, origin/HEAD) Update image repository and tag in values.yaml
+5858475 Change Docker image tags to use GHCR
+b162d8e Add CI workflow for testing and building Python API
+891380f Add files via upload
+e38817e Add files via upload
+481e176 Increase replicaCount from 2 to 3
+7c9fb8d Adicionar chart da API
+ac80819 Add files via upload
